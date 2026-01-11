@@ -5,7 +5,7 @@ from pathlib import Path
 
 BACKGROUNDS = "/home/jappe/Pictures/Backgrounds"
 MODULES = "/home/jappe/.config/arch-config/modules"
-theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str]]]] = {
+theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[str]]]]] = {
     "alacritty": {
         "config": f"{MODULES}/alacritty/dotfiles/alacritty/themes/theme.toml",
         "patterns": [
@@ -63,8 +63,9 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str]]]] = {
     "niri-colors": {
         "config": f"{MODULES}/niri/dotfiles/niri/config.kdl",
         "patterns": [
-                (r'active-color "#[0-9a-fA-F]{6}ff"', 'active-color "{color}ff"', "color14"),
-                (r'urgent-color "#[0-9a-fA-F]{6}ff"', 'urgent-color "{color}ff"', "foreground")
+                (r'active-gradient from="#[0-9a-fA-F]{6}ff" to="#[0-9a-fA-F]{6}ff" angle-0', 'active-gradient from="{color0}ff" to="{color1}ff" angle=0', ["color6", "color2"])
+                # (r'active-color "#[0-9a-fA-F]{6}ff"', 'active-color "{color}ff"', "color14"),
+                # (r'urgent-color "#[0-9a-fA-F]{6}ff"', 'urgent-color "{color}ff"', "foreground")
             ],
             
         },
@@ -115,6 +116,12 @@ def replace_colors_in_config(module_key, colors):
             config = re.sub(
                 pattern,
                 replacement.format(color=colors[color_key][1:]),
+                config
+            )
+        elif module_key == "niri-colors":
+            config = re.sub(
+                pattern,
+                replacement.format(color0=colors[color_key[0]], color1=colors[color_key[1]]),
                 config
             )
         else:
