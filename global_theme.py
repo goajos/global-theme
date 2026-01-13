@@ -39,7 +39,7 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[s
                 (r"prompt=[0-9a-fA-F]{8}", "prompt={color}ff", "foreground"), # >
                 (r"input=[0-9a-fA-F]{8}", "input={color}ff", "foreground"), # input text
                 (r"match=[0-9a-fA-F]{8}", "match={color}ff", "color6"), # non selection bar match
-                (r"selection=[0-9a-fA-F]{6}80", "selection={color}80", "color14"), # selection bar
+                (r"selection=[0-9a-fA-F]{6}80", "selection={color}80", "color6"), # selection bar
                 (r"selection-match=[0-9a-fA-F]{8}", "selection-match={color}ff", "color6"), # selection bar match
                 (r"selection-text=[0-9a-fA-F]{8}", "selection-text={color}ff", "background"), # selection bar text
                 (r"border=[0-9a-fA-F]{8}", "border={color}ff", "color6"),
@@ -57,15 +57,13 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[s
                (r"background-color=#[0-9a-fA-F]{6}80", "background-color={color}80", "background"),
                (r"text-color=#[0-9a-fA-F]{8}", "text-color={color}ff", "foreground"),
                (r"border-color=#[0-9a-fA-F]{8}", "border-color={color}ff", "color6"),
-               (r"progress-color=over #[0-9a-fA-F]{6}80", "progress-color=over {color}80", "color14"),
+               (r"progress-color=over #[0-9a-fA-F]{6}80", "progress-color=over {color}80", "color6"),
             ],
         },
     "niri-colors": {
         "config": f"{MODULES}/niri/dotfiles/niri/config.kdl",
         "patterns": [
-                (r'active-gradient from="#[0-9a-fA-F]{6}ff" to="#[0-9a-fA-F]{6}ff" angle-0', 'active-gradient from="{color0}ff" to="{color1}ff" angle=0', ["color6", "color2"])
-                # (r'active-color "#[0-9a-fA-F]{6}ff"', 'active-color "{color}ff"', "color14"),
-                # (r'urgent-color "#[0-9a-fA-F]{6}ff"', 'urgent-color "{color}ff"', "foreground")
+                (r'active-gradient from="#[0-9a-fA-F]{6}ff" to="#[0-9a-fA-F]{6}ff" angle=90', 'active-gradient from="{color0}ff" to="{color1}ff" angle=90', ["color6", "color2"])
             ],
             
         },
@@ -99,6 +97,15 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[s
                 (r'bright_magenta = \"#[0-9a-fA-F]{6}\"', 'bright_magenta = "{color}"', "color13"),
                 (r'bright_cyan = \"#[0-9a-fA-F]{6}\"', 'bright_cyan = "{color}"', "color14"),
                 (r'bright_white = \"#[0-9a-fA-F]{6}\"', 'bright_white = "{color}"', "color15"),
+            ],
+        },
+    "shell": {
+        "config": f"{MODULES}/shell/.bashrc",
+        "patterns": [
+                (r"PS1_RGB_USER=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_USER=$(hex_to_rgb '{color}')", "color1"),
+                (r"PS1_RGB_HOST=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_HOST=$(hex_to_rgb '{color}')", "color2"),
+                (r"PS1_RGB_WDBG=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_WDBG=$(hex_to_rgb '{color}')", "foreground"),
+                (r"PS1_RGB_WDFG=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_WDFG=$(hex_to_rgb '{color}')", "background"),
             ],
         },
     }
@@ -171,7 +178,7 @@ def main():
 
     show_color_reference(flat_colors)
 
-    color_hex = flat_colors["color14"]
+    color_hex = flat_colors["color6"]
     color_rgb = ImageColor.getrgb(color_hex)
     overview_image = Image.new("RGB", (1920,1080), color_rgb)
     overview_path = Path(f"{BACKGROUNDS}/solid_{color_hex}.jpg")
@@ -193,5 +200,6 @@ def main():
     replace_colors_in_config("mako", flat_colors)
     replace_colors_in_config("niri-colors", flat_colors)
     replace_colors_in_config("nvim", flat_colors)
+    replace_colors_in_config("shell", flat_colors)
 
 main()
