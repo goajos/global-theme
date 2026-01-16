@@ -5,6 +5,7 @@ description = " Global theme setup with Python and Pywal "
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "haishoku>=1.1.8",
     "pillow>=12.1.0",
     "pywal>=3.8.13",
 ]

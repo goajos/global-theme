@@ -1,4 +1,5 @@
 import pywal
+import tomllib
 from PIL import Image, ImageColor
 import re
 from pathlib import Path
@@ -38,11 +39,11 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[s
                 (r"text=[0-9a-fA-F]{8}", "text={color}ff", "foreground"),
                 (r"prompt=[0-9a-fA-F]{8}", "prompt={color}ff", "foreground"), # >
                 (r"input=[0-9a-fA-F]{8}", "input={color}ff", "foreground"), # input text
-                (r"match=[0-9a-fA-F]{8}", "match={color}ff", "color6"), # non selection bar match
-                (r"selection=[0-9a-fA-F]{6}80", "selection={color}80", "color6"), # selection bar
-                (r"selection-match=[0-9a-fA-F]{8}", "selection-match={color}ff", "color6"), # selection bar match
-                (r"selection-text=[0-9a-fA-F]{8}", "selection-text={color}ff", "background"), # selection bar text
-                (r"border=[0-9a-fA-F]{8}", "border={color}ff", "color6"),
+                (r"match=[0-9a-fA-F]{8}", "match={color}ff", "color1"), # non selection bar match
+                (r"selection=[0-9a-fA-F]{6}80", "selection={color}80", "color2"), # selection bar
+                (r"selection-match=[0-9a-fA-F]{8}", "selection-match={color}ff", "color1"), # selection bar match
+                (r"selection-text=[0-9a-fA-F]{8}", "selection-text={color}ff", "foreground"), # selection bar text
+                (r"border=[0-9a-fA-F]{8}", "border={color}ff", "color2"),
             ],
         },
     "gtklock": {
@@ -51,13 +52,31 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[s
                 r'background-image: url\("[^"]+"\)',
             ],
         },
+    "fzf": {
+        "config": f"{MODULES}/shell/.bashrc",
+        "patterns": [
+                (r'FZF_FG="#[0-9a-fA-F]{6}"', 'FZF_FG="{color}"', "foreground"),
+                (r'FZF_FGP="#[0-9a-fA-F]{6}"', 'FZF_FGP="{color}"', "foreground"),
+                (r'FZF_BG="#[0-9a-fA-F]{6}"', 'FZF_BG="{color}"', "background"),
+                (r'FZF_BGP="#[0-9a-fA-F]{6}"', 'FZF_BGP="{color}"', "color2"),
+                (r'FZF_HL="#[0-9a-fA-F]{6}"', 'FZF_HL="{color}"', "color1"),
+                (r'FZF_BORDER="#[0-9a-fA-F]{6}"', 'FZF_BORDER="{color}"', "color2"),
+                (r'FZF_HEADER="#[0-9a-fA-F]{6}"', 'FZF_HEADER="{color}"', "color2"),
+                (r'FZF_GUTTER="#[0-9a-fA-F]{6}"', 'FZF_GUTTER="{color}"', "background"),
+                (r'FZF_SPINNER="#[0-9a-fA-F]{6}"', 'FZF_SPINNER="{color}"', "color1"),
+                (r'FZF_INFO="#[0-9a-fA-F]{6}"', 'FZF_INFO="{color}"', "foreground"),
+                (r'FZF_POINTER="#[0-9a-fA-F]{6}"', 'FZF_POINTER="{color}"', "color1"),
+                (r'FZF_MARKER="#[0-9a-fA-F]{6}"', 'FZF_MARKER="{color}"', "color1"),
+                (r'FZF_PROMPT="#[0-9a-fA-F]{6}"', 'FZF_PROMPT="{color}"', "foreground"),
+            ],
+        },
     "mako": {
         "config": f"{MODULES}/mako/dotfiles/mako/config",
         "patterns": [
                (r"background-color=#[0-9a-fA-F]{6}80", "background-color={color}80", "background"),
                (r"text-color=#[0-9a-fA-F]{8}", "text-color={color}ff", "foreground"),
-               (r"border-color=#[0-9a-fA-F]{8}", "border-color={color}ff", "color6"),
-               (r"progress-color=over #[0-9a-fA-F]{6}80", "progress-color=over {color}80", "color6"),
+               (r"border-color=#[0-9a-fA-F]{8}", "border-color={color}ff", "color2"),
+               (r"progress-color=over #[0-9a-fA-F]{6}80", "progress-color=over {color}80", "color1"),
             ],
         },
     "niri-colors": {
@@ -102,10 +121,10 @@ theme_modules: dict[str, dict[str, str | list[str | tuple[str, str, str | list[s
     "shell": {
         "config": f"{MODULES}/shell/.bashrc",
         "patterns": [
-                (r"PS1_RGB_USER=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_USER=$(hex_to_rgb '{color}')", "color1"),
-                (r"PS1_RGB_HOST=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_HOST=$(hex_to_rgb '{color}')", "color2"),
-                (r"PS1_RGB_WDBG=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_WDBG=$(hex_to_rgb '{color}')", "foreground"),
-                (r"PS1_RGB_WDFG=\$\(hex_to_rgb '#[0-9a-fA-F]{6}'\)", "PS1_RGB_WDFG=$(hex_to_rgb '{color}')", "background"),
+                (r'RGB_USER=\$\(hex_to_rgb "#[0-9a-fA-F]{6}"\)', 'RGB_USER=$(hex_to_rgb "{color}")', "color1"),
+                (r'RGB_HOST=\$\(hex_to_rgb "#[0-9a-fA-F]{6}"\)', 'RGB_HOST=$(hex_to_rgb "{color}")', "color2"),
+                (r'RGB_WDBG=\$\(hex_to_rgb "#[0-9a-fA-F]{6}"\)', 'RGB_WDBG=$(hex_to_rgb "{color}")', "foreground"),
+                (r'RGB_WDFG=\$\(hex_to_rgb "#[0-9a-fA-F]{6}"\)', 'RGB_WDFG=$(hex_to_rgb "{color}")', "background"),
             ],
         },
     }
@@ -167,14 +186,52 @@ def show_color_reference(flat_colors):
         print(f"{key:20} {color:10} {ansi_bg}█████{reset}")
     print("="*60 + "\n")
 
+def load_toml_theme(theme_path):
+    with open(theme_path, "rb") as fid:
+        theme = tomllib.load(fid) 
+
+    return theme
+
+def parse_toml_theme(theme):
+    colors = theme["colors"]
+    flat_colors= {}
+    flat_colors = {
+        "background": colors["primary"]["background"],
+        "foreground": colors["primary"]["foreground"],
+        "cursor": colors["cursor"]["cursor"],
+        "color0": colors["normal"]["black"],
+        "color1": colors["normal"]["red"],
+        "color2": colors["normal"]["green"],
+        "color3": colors["normal"]["yellow"],
+        "color4": colors["normal"]["blue"],
+        "color5": colors["normal"]["magenta"],
+        "color6": colors["normal"]["cyan"],
+        "color7": colors["normal"]["white"],
+        "color8": colors["bright"]["black"],
+        "color9": colors["bright"]["red"],
+        "color10": colors["bright"]["green"],
+        "color11": colors["bright"]["yellow"],
+        "color12": colors["bright"]["blue"],
+        "color13": colors["bright"]["magenta"],
+        "color14": colors["bright"]["cyan"],
+        "color15": colors["bright"]["white"],
+    }
+    
+    print(flat_colors)
+
+    return flat_colors
+
 def main():
     image_path = Path(f"{BACKGROUNDS}/lofi-boy.jpg")
-    # image_path = Path(f"{BACKGROUNDS}/adventure-time.jpg")
-    image = pywal.image.get(image_path)
-    colors = pywal.colors.get(image)
-    flat_colors = {
-        **colors["special"], **colors["colors"]
-    }
+    # image = pywal.image.get(image_path)
+    # colors = pywal.colors.get(image, backend="haishoku", c16="darken")
+    # flat_colors = {
+    #     **colors["special"], **colors["colors"]
+    # }
+
+    toml_theme_path = Path(f"{MODULES}/alacritty/dotfiles/alacritty/themes/theme.toml")
+    theme = load_toml_theme(toml_theme_path)
+    flat_colors= parse_toml_theme(theme)
 
     show_color_reference(flat_colors)
 
@@ -195,8 +252,9 @@ def main():
     ]
     replace_image_in_config(theme_modules["gtklock"], gtklock_replacements)
 
-    replace_colors_in_config("alacritty", flat_colors)
+    # replace_colors_in_config("alacritty", flat_colors)
     replace_colors_in_config("fuzzel", flat_colors)
+    replace_colors_in_config("fzf", flat_colors)
     replace_colors_in_config("mako", flat_colors)
     replace_colors_in_config("niri-colors", flat_colors)
     replace_colors_in_config("nvim", flat_colors)

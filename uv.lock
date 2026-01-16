@@ -7,14 +7,28 @@ name = "global-theme"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "haishoku" },
     { name = "pillow" },
     { name = "pywal" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "haishoku", specifier = ">=1.1.8" },
     { name = "pillow", specifier = ">=12.1.0" },
     { name = "pywal", specifier = ">=3.8.13" },
+]
+
+[[package]]
+name = "haishoku"
+version = "1.1.8"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pillow" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/31/6b/f0f211b49a91fd57f7b1e89ee970e619b2e58540b27ff821d1dcecb7852e/haishoku-1.1.8.tar.gz", hash = "sha256:e4b9a14c03586081b18abcf04b4320168fea93ff611e81b2bccd5d5269ffcbd4", size = 5628, upload-time = "2019-07-11T08:19:37.061Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d1/9d/5d52b35d4aef716266e812d8c6df9702e31de4499a4cbe567c0e71cee225/haishoku-1.1.8-py3-none-any.whl", hash = "sha256:c505b8154aa41c98748059860033d47c1409330c5ac4fdbc90378223ebb996b4", size = 5858, upload-time = "2019-07-11T08:19:34.946Z" },
 ]
 
 [[package]]
